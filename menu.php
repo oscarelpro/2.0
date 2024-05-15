@@ -1,9 +1,9 @@
 <?php  
 
 session_start();
-$usuario= $_SESSION['username'];
-$pass=$_SESSION['pass'];
-$id=$_SESSION['id'];
+//$usuario= $_SESSION['username'];
+//$pass=$_SESSION['pass'];
+//$id=$_SESSION['id'];
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -98,7 +98,7 @@ $id=$_SESSION['id'];
           DELIVERY
           </a>
           <ul class="dropdown-menu">
-            <li><a class="dropdown-item" href="#">NUEVO</a></li>
+            <li><a class="dropdown-item" href="deli.php">NUEVO</a></li>
             <li><a class="dropdown-item" href="#">ADMINSITRAR</a></li>
            
          
