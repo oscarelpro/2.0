@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 10-05-2024 a las 04:50:26
+-- Tiempo de generación: 15-05-2024 a las 04:13:06
 -- Versión del servidor: 10.4.28-MariaDB
 -- Versión de PHP: 8.0.28
 
@@ -64,6 +64,28 @@ INSERT INTO `tbl_categoria` (`id_categoria`, `categoria`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Estructura de tabla para la tabla `tbl_clientes`
+--
+
+CREATE TABLE `tbl_clientes` (
+  `id_cliente` int(11) NOT NULL,
+  `cliente` varchar(20) NOT NULL,
+  `cedula` int(11) NOT NULL,
+  `telefono` varchar(30) NOT NULL,
+  `correo` varchar(30) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `tbl_clientes`
+--
+
+INSERT INTO `tbl_clientes` (`id_cliente`, `cliente`, `cedula`, `telefono`, `correo`) VALUES
+(1, 'OSCAR', 25213710, '04242585491', 'loscar630@gmail.com'),
+(2, 'dubraska', 25625917, '04242591410', 'dududhu@gmail.com');
+
+-- --------------------------------------------------------
+
+--
 -- Estructura de tabla para la tabla `tbl_deli`
 --
 
@@ -76,6 +98,14 @@ CREATE TABLE `tbl_deli` (
   `p_seguridad` varchar(30) NOT NULL,
   `correo` varchar(30) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `tbl_deli`
+--
+
+INSERT INTO `tbl_deli` (`id_deli`, `nombre`, `cedula`, `pass`, `usu_deli`, `p_seguridad`, `correo`) VALUES
+(1, 'oscar', 25213710, '1234', 'loscar630', 'nombre de mi madre', 'loscar630@gmail.com'),
+(2, 'keyber', 5416157, '1234', 'elguaro', 'moto', 'horse');
 
 -- --------------------------------------------------------
 
@@ -126,6 +156,32 @@ INSERT INTO `tbl_producto` (`id_producto`, `sku`, `p_nombre`, `precio`, `stock`,
 -- --------------------------------------------------------
 
 --
+-- Estructura de tabla para la tabla `tbl_registro`
+--
+
+CREATE TABLE `tbl_registro` (
+  `id_pedido` int(11) NOT NULL,
+  `cantidad` int(11) NOT NULL,
+  `fecha` date NOT NULL,
+  `fk_delivery` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `tbl_registro_delivery`
+--
+
+CREATE TABLE `tbl_registro_delivery` (
+  `id_pedido` int(11) NOT NULL,
+  `id_repartidor` int(11) NOT NULL,
+  `cantidad` int(11) NOT NULL,
+  `fecha` date NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Estructura de tabla para la tabla `tbl_roll`
 --
 
@@ -142,6 +198,27 @@ INSERT INTO `tbl_roll` (`id_rol`, `tipo`) VALUES
 (1, 'admin'),
 (2, 'usuario'),
 (3, 'master');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `tbl_tventa`
+--
+
+CREATE TABLE `tbl_tventa` (
+  `id_tipo` int(11) NOT NULL,
+  `t_venta` varchar(20) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `tbl_tventa`
+--
+
+INSERT INTO `tbl_tventa` (`id_tipo`, `t_venta`) VALUES
+(1, 'TIENDA'),
+(2, 'PICK UP'),
+(3, 'DELIVERY'),
+(4, 'ENVIO NACIONAL');
 
 -- --------------------------------------------------------
 
@@ -169,6 +246,26 @@ INSERT INTO `tbl_usuario` (`id_usuario`, `usuario`, `pass`, `fk_rool`, `pregunta
 (4, 'infante', '123456', 1, 'nombre de mi hijo', 'santiago'),
 (5, 'felipe', '1234', 2, 'nombre de mi hijo', 'santi');
 
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `tbl_venta`
+--
+
+CREATE TABLE `tbl_venta` (
+  `id_venta` int(11) NOT NULL,
+  `fk_producto` int(11) NOT NULL,
+  `fk_cliente` int(11) NOT NULL,
+  `fk_tipo_venta` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `tbl_venta`
+--
+
+INSERT INTO `tbl_venta` (`id_venta`, `fk_producto`, `fk_cliente`, `fk_tipo_venta`) VALUES
+(1, 1, 1, 1);
+
 --
 -- Índices para tablas volcadas
 --
@@ -184,6 +281,12 @@ ALTER TABLE `tbl_almacen`
 --
 ALTER TABLE `tbl_categoria`
   ADD PRIMARY KEY (`id_categoria`);
+
+--
+-- Indices de la tabla `tbl_clientes`
+--
+ALTER TABLE `tbl_clientes`
+  ADD PRIMARY KEY (`id_cliente`);
 
 --
 -- Indices de la tabla `tbl_deli`
@@ -207,10 +310,29 @@ ALTER TABLE `tbl_producto`
   ADD KEY `categoria` (`categoria`);
 
 --
+-- Indices de la tabla `tbl_registro`
+--
+ALTER TABLE `tbl_registro`
+  ADD PRIMARY KEY (`id_pedido`),
+  ADD UNIQUE KEY `fk_delivery` (`fk_delivery`);
+
+--
+-- Indices de la tabla `tbl_registro_delivery`
+--
+ALTER TABLE `tbl_registro_delivery`
+  ADD PRIMARY KEY (`id_pedido`);
+
+--
 -- Indices de la tabla `tbl_roll`
 --
 ALTER TABLE `tbl_roll`
   ADD PRIMARY KEY (`id_rol`);
+
+--
+-- Indices de la tabla `tbl_tventa`
+--
+ALTER TABLE `tbl_tventa`
+  ADD PRIMARY KEY (`id_tipo`);
 
 --
 -- Indices de la tabla `tbl_usuario`
@@ -218,6 +340,15 @@ ALTER TABLE `tbl_roll`
 ALTER TABLE `tbl_usuario`
   ADD PRIMARY KEY (`id_usuario`),
   ADD KEY `fk_rool` (`fk_rool`);
+
+--
+-- Indices de la tabla `tbl_venta`
+--
+ALTER TABLE `tbl_venta`
+  ADD PRIMARY KEY (`id_venta`),
+  ADD UNIQUE KEY `fk_producto` (`fk_producto`,`fk_cliente`,`fk_tipo_venta`),
+  ADD KEY `fk_cliente` (`fk_cliente`),
+  ADD KEY `fk_tipo_venta` (`fk_tipo_venta`);
 
 --
 -- AUTO_INCREMENT de las tablas volcadas
@@ -236,10 +367,16 @@ ALTER TABLE `tbl_categoria`
   MODIFY `id_categoria` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
+-- AUTO_INCREMENT de la tabla `tbl_clientes`
+--
+ALTER TABLE `tbl_clientes`
+  MODIFY `id_cliente` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
 -- AUTO_INCREMENT de la tabla `tbl_deli`
 --
 ALTER TABLE `tbl_deli`
-  MODIFY `id_deli` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_deli` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT de la tabla `tbl_marca`
@@ -254,16 +391,40 @@ ALTER TABLE `tbl_producto`
   MODIFY `id_producto` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
+-- AUTO_INCREMENT de la tabla `tbl_registro`
+--
+ALTER TABLE `tbl_registro`
+  MODIFY `id_pedido` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `tbl_registro_delivery`
+--
+ALTER TABLE `tbl_registro_delivery`
+  MODIFY `id_pedido` int(11) NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT de la tabla `tbl_roll`
 --
 ALTER TABLE `tbl_roll`
   MODIFY `id_rol` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
+-- AUTO_INCREMENT de la tabla `tbl_tventa`
+--
+ALTER TABLE `tbl_tventa`
+  MODIFY `id_tipo` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
 -- AUTO_INCREMENT de la tabla `tbl_usuario`
 --
 ALTER TABLE `tbl_usuario`
   MODIFY `id_usuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
+-- AUTO_INCREMENT de la tabla `tbl_venta`
+--
+ALTER TABLE `tbl_venta`
+  MODIFY `id_venta` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- Restricciones para tablas volcadas
@@ -278,10 +439,24 @@ ALTER TABLE `tbl_producto`
   ADD CONSTRAINT `tbl_producto_ibfk_3` FOREIGN KEY (`marca`) REFERENCES `tbl_marca` (`id_marca`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
+-- Filtros para la tabla `tbl_registro`
+--
+ALTER TABLE `tbl_registro`
+  ADD CONSTRAINT `tbl_registro_ibfk_1` FOREIGN KEY (`fk_delivery`) REFERENCES `tbl_deli` (`id_deli`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
 -- Filtros para la tabla `tbl_usuario`
 --
 ALTER TABLE `tbl_usuario`
   ADD CONSTRAINT `tbl_usuario_ibfk_1` FOREIGN KEY (`fk_rool`) REFERENCES `tbl_roll` (`id_rol`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Filtros para la tabla `tbl_venta`
+--
+ALTER TABLE `tbl_venta`
+  ADD CONSTRAINT `tbl_venta_ibfk_1` FOREIGN KEY (`fk_producto`) REFERENCES `tbl_producto` (`id_producto`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `tbl_venta_ibfk_2` FOREIGN KEY (`fk_cliente`) REFERENCES `tbl_clientes` (`id_cliente`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `tbl_venta_ibfk_3` FOREIGN KEY (`fk_tipo_venta`) REFERENCES `tbl_tventa` (`id_tipo`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
